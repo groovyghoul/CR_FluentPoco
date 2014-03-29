@@ -71,7 +71,6 @@ Note: The `Continue()` method is where we actually setup all of our Selenium mag
 
 ####TODO and Construction Notes####
 
-* the Getters are not actually setting their scope to Public for some reason
 * fields that are of List<T> should actually do the following:
 
 If the field looks like:
