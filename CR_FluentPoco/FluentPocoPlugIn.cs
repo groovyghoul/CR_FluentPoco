@@ -5,6 +5,7 @@ using System.Linq;
 using DevExpress.CodeRush.Core;
 using DevExpress.CodeRush.PlugInCore;
 using DevExpress.CodeRush.StructuralParser;
+using DevExpress.CodeRush.Core.Replacement;
 
 namespace dxFluentPoco
 {
@@ -54,19 +55,54 @@ namespace dxFluentPoco
 
         private void FluentPoco_Apply(Object sender, ApplyContentEventArgs ea)
         {
-            Class activeClass = CodeRush.Source.ActiveClass;
+            var originalClassName = CodeRush.Source.ActiveClass.Name;
 
-            foreach (var fld in activeClass.AllFields)
-            {
-                BuildGetterProperty(activeClass, fld as Member);
-                BuildSetterMethod(activeClass, fld as Member);
-            }
+            RenameClass();
+            
+            TextDocument.Active.ParseIfTextChanged();
 
-            BuildFluentStartingPoint(activeClass);
+            BuildProperties();
+            BuildFluentStartingPoint(originalClassName);
+
+            ChangeOriginalClassesScopeToPublic();
         }
 
-        private void BuildGetterProperty(Class activeClass, Member element)
+        private static void ChangeOriginalClassesScopeToPublic()
         {
+            VisibilityChanger Changer = new VisibilityChanger();
+            Changer.ChangeVisibility(CodeRush.Source.ActiveClass, MemberVisibility.Public);
+        }
+
+        private void RenameClass()
+        {
+            var activeClass = CodeRush.Source.ActiveClass;
+
+            FileChangeCollection changes = new FileChangeCollection();
+            IElementCollection references = activeClass.FindAllReferences(activeClass.Solution);
+
+            foreach (IElement reference in references)
+            {
+                LanguageElement hydratedElement = LanguageElementRestorer.ConvertToLanguageElement(reference);
+                changes.Add(new FileChange(reference.FirstFile.Name, hydratedElement.Range, activeClass.Name + "Helper"));
+            }
+
+            changes.Add(new FileChange(activeClass.GetSourceFile().Name, activeClass.NameRange, activeClass.Name + "Helper"));
+
+            CodeRush.File.ApplyChanges(changes);
+        }
+
+        private void BuildProperties()
+        {
+            foreach (var fld in CodeRush.Source.ActiveClass.AllFields)
+            {
+                BuildGetterProperty(fld as Member);
+                BuildSetterMethod(fld as Member);
+            }
+        }
+
+        private void BuildGetterProperty(Member element)
+        {
+            var activeClass = CodeRush.Source.ActiveClass;
             var builder = new ElementBuilder();
 
             var publicName = char.ToUpper(element.Name[0]) + element.Name.Substring(1);
@@ -87,8 +123,9 @@ namespace dxFluentPoco
             CodeRush.Documents.Format(newPropertyRange);
         }
 
-        private void BuildSetterMethod(Class activeClass, Member element)
+        private void BuildSetterMethod(Member element)
         {
+            var activeClass = CodeRush.Source.ActiveClass;
             var builder = new ElementBuilder();
 
             var publicName = char.ToUpper(element.Name[0]) + element.Name.Substring(1);
@@ -112,10 +149,11 @@ namespace dxFluentPoco
 
         }
 
-        private void BuildFluentStartingPoint(Class activeClass)
+        private void BuildFluentStartingPoint(string originalClassName)
         {
+            var activeClass = CodeRush.Source.ActiveClass;
             var builder = new ElementBuilder();
-            var newClass = builder.AddClass(null, activeClass.Name + "Helper");
+            var newClass = builder.AddClass(null, originalClassName);
             newClass.Visibility = MemberVisibility.Public;
 
             var method = builder.AddMethod(newClass, activeClass.Name, "Create");

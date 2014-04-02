@@ -8,11 +8,11 @@ using DevExpress.CodeRush.Common;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("dxFluentPoco")]
+[assembly: AssemblyTitle("CR_FluentPoco")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("dxFluentPoco")]
+[assembly: AssemblyProduct("CR_FluentPoco")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

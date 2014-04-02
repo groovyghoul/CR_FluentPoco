@@ -3,12 +3,12 @@ CR_FluentPoco
 
 CodeRush expansion plugin to turn a list of private fields into fluent methods.
 
-I created this to help me build helper classes for an automated testing framework I was making with Selenium and it's WebDriver.
+I created this to help me build helper classes for an automated testing framework I was making with [Selenium](http://docs.seleniumhq.org/) and it's [WebDriver](http://docs.seleniumhq.org/projects/webdriver/).
 
 ####Beginning Class####
 
 ```
-public class Person
+class Person
 {
     private string lastName;
     private string firstName;
@@ -17,10 +17,10 @@ public class Person
 
 ####After applying####
 
-Place the caret on either of the fields and hit your CodeRush activator shortcut (mine is set to `Ctrl - ~` <-- that's a tilde). You can also assign a shortcut to this. Select `Create Fluent Poco Stuff`
+Place the caret on either of the fields and hit your CodeRush activator shortcut (mine is set to `Ctrl - ~` <-- that's a tilde). You can also assign a shortcut to this. Select `Create Fluent Poco Stuff`.
 
 ```
-public class Person
+public class PersonHelper
 {
    private string lastName;
    private string firstName;
@@ -33,7 +33,7 @@ public class Person
        }
    }
    
-   public Person WithLastName(string lastName)
+   public PersonHelper WithLastName(string lastName)
    {
        this.lastName = lastName;
        return this;
@@ -47,27 +47,36 @@ public class Person
        }
    }
    
-   public Person WithFirstName(string firstName)
+   public PersonHelper WithFirstName(string firstName)
    {
        this.firstName = firstName;
        return this;
    }
 }
 
-public class PersonHelper
+public class Person
 {
-    public static Person Create()
+    public static PersonHelper Create()
     {
-        return new Person();
+        return new PersonHelper();
     }
 }
 ```
 
 ####How we use the fluent methods####
 
-`PersonHelper.Create().WithFirstName("John").WithLastName("Doe").Continue();`
+`Person.Create().WithFirstName("John").WithLastName("Doe").Continue();`
 
 Note: The `Continue()` method is where we actually setup all of our Selenium magic and use the properties that were created.
+
+####Requirements####
+* DevExpress CodeRush [ [https://www.devexpress.com/Products/CodeRush/](https://www.devexpress.com/Products/CodeRush/ "CodeRush") ]
+* following Rory Becker on Twitter [@RoryBecker](http://twitter.com/RoryBecker) :smiley:
+
+####Installation Notes####
+1. Download source
+2. Open solution in Visual Studio 2013
+3. Go to `Properties -> Build -> Output Path` and adjust so that the plugin builds to the `%UserProfile%\Documents\DevExpress\IDE Tools\Community\PlugIns\` folder (Disclaimer: I'm not sure if VS understands special folders such as `%UserProfile%`, so just browse to your `Documents` folder)
 
 ####TODO and Construction Notes####
 
