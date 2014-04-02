@@ -79,7 +79,8 @@ Note: The `Continue()` method is where we actually setup all of our Selenium mag
 3. Go to `Properties -> Build -> Output Path` and adjust so that the plugin builds to the `%UserProfile%\Documents\DevExpress\IDE Tools\Community\PlugIns\` folder (Disclaimer: I'm not sure if VS understands special folders such as `%UserProfile%`, so just browse to your `Documents` folder)
 
 ####License####
-This project is licensed under the terms of the MIT license.
+Copyright (c) 2014 Richard O'Neil, contributors.
+Released under the MIT license
 
 ####TODO and Construction Notes####
 
