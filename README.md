@@ -79,7 +79,7 @@ Note: The `Continue()` method is where we actually setup all of our Selenium mag
 3. Go to `Properties -> Build -> Output Path` and adjust so that the plugin builds to the `%UserProfile%\Documents\DevExpress\IDE Tools\Community\PlugIns\` folder (Disclaimer: I'm not sure if VS understands special folders such as `%UserProfile%`, so just browse to your `Documents` folder)
 
 ####License####
-This projected is licensed under the terms of the MIT license.
+This project is licensed under the terms of the MIT license.
 
 ####TODO and Construction Notes####
 
@@ -91,6 +91,13 @@ If the field looks like:
 The fluent-with method should look like:
 
 ```
-public ThingHelper FillThings(Thing thing){    things.Add(thing);    return this;}
-```
-As for the getter...I am not sure what I want that to look like yet.
+public ThingHelper FillThings(Thing thing)
+{
+    things.Add(thing);
+    return this;
+}
+
+```
+
+
+As for the getter...I am not sure what I want that to look like yet.
